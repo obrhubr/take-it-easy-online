@@ -42,6 +42,7 @@
 				<div style="width: 100%; display: flex; flex-direction: row; justify-content: space-between;">
 					<button id="undo-button" class="button" style="background-color: #aaddff";>Undo</button>
 					<button id="reset-button" class="button" style="background-color: #ffbbbb";>Reset</button>
+					<button id="seed-button" class="button" style="background-color: #eeffee";>New Seed</button>
 				</div>
 				<div class="buttons" id="ai-buttons">
 					<select id="select-ai" class="button">
@@ -182,6 +183,13 @@
 		// Bind the undo button to the undo function
 		document.getElementById('undo-button').addEventListener('click', undo);
 		document.getElementById('reset-button').addEventListener('click', reset);
+		document.getElementById('seed-button').addEventListener('click', () => {
+			seed = Math.floor(Math.random() * 1000000);
+			document.getElementById("seed").innerText = seed;
+
+			reset();
+			load_ai_score();
+		});
 
 		document.querySelectorAll("#board .tile").forEach(tile => {
 			tile.addEventListener("click", () => {
