@@ -1,0 +1,132 @@
+/* https://css-tricks.com/hexagons-and-beyond-flexible-responsive-grid-patterns-sans-media-queries/ */
+.main {
+	/* size  */
+	--w: calc(var(--h) * 1.1547);
+	/* margin */
+	--m: 1px;
+
+	--f: calc(var(--h) + 4 * var(--m) - 1px);
+
+	display: flex;
+	min-width: calc(var(--w) * 4.8);
+	max-width: calc(var(--w) * 4.8);
+
+	/* correct for non-centeredness of hexagons in .main */
+	margin-top: calc(-1 * var(--h));
+	margin-left: calc(var(--w) - (tan(30deg) * var(--h) / 2));
+	margin-bottom: var(--h);
+
+	user-select: none;
+}
+
+.container {
+	font-size: 0;
+}
+
+.container div {
+	display: inline-block;
+	font-size: initial;
+
+	height: var(--h);
+	width: var(--w);
+	margin: var(--m);
+	clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+
+	margin-bottom: calc(var(--m) - var(--h) * 0.5);
+	margin-right: calc(var(--w) / 2 + var(--m)*4);
+
+	/* Make no-used tiles appear invisible */
+	visibility: hidden;
+}
+
+.container::before {
+	content: "";
+	width: calc(var(--w) - (tan(30deg) * var(--h) / 2) + var(--m)*2.8);
+	float: left;
+	height: 120%;
+	shape-outside: repeating-linear-gradient(#0000 0 calc(var(--f) - 3px),
+			#000 0 var(--f));
+}
+
+.container .tile {
+	visibility: visible;
+	background-color: #eee;
+
+	position: relative;
+	overflow: hidden;
+}
+
+.label {
+	height: 100%;
+	width: 100%;
+
+	/* Align text on line */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.line {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: calc(var(--w) * 0.1);
+	height: 100%;
+	transform-origin: center;
+
+	/* Align text on line */
+	display: inline-block;
+	text-align: center;
+}
+
+/* Vertical */
+.line.v {
+	transform: translate(-50%, -50%) rotate(0deg);
+}
+
+/* Diagonal top-left to bottom-right */
+.line.d1 {
+	transform: translate(-50%, -50%) rotate(60deg);
+}
+
+/* Diagonal top-right to bottom-left */
+.line.d2 {
+	transform: translate(-50%, -50%) rotate(-60deg);
+}
+
+/* Colour definitions for the different tiles */
+.l1 .v {
+	background-color: rgb(180, 180, 180);
+}
+
+.l5 .v {
+	background-color: rgb(33, 157, 132);
+}
+
+.l9 .v {
+	background-color: rgb(255, 248, 50);
+}
+
+.l2 .d1 {
+	background-color: rgb(255, 214, 214);
+}
+
+.l6 .d1 {
+	background-color: rgb(255, 64, 64);
+}
+
+.l7 .d1 {
+	background-color: rgb(170, 215, 66);
+}
+
+.l3 .d2 {
+	background-color: rgb(255, 120, 230);
+}
+
+.l4 .d2 {
+	background-color: rgb(85, 221, 252);
+}
+
+.l8 .d2 {
+	background-color: rgb(255, 144, 47);
+}

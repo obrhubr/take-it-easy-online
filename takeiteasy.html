@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Obtain It Lightly</title>
+	<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon.png">
+
+	<link rel="stylesheet" type="text/css" href="assets/styles/page.css">
+	<link rel="stylesheet" type="text/css" href="assets/styles/game.css">
+	
+	<script src="https://cdn.jsdelivr.net/npm/onnxruntime-web/dist/ort.min.js"></script>
+</head>
+
+<body>
+	<div class="navbar">
+		<div class="logo"><a class="logo" href="/">Obtain It Lightly - The Game</a></div>
+		<div>Seed: <span id="seed"></span> - <span id="share">Click to Copy Link</span></div>
+	</div>
+	
+	<div class="site">
+		<div id="debug" class="debug">
+			<div>
+				<div class="debug-line"><div>Placed <span id="tile-count"></span> pieces.</div></div>
+				<div class="debug-line"><div>Score: <span id="score">0</span></div></div>
+				<div id="ai-score" class="debug-line" style="font-weight: 600;"></div>
+			</div>
+			
+			<div style="margin-bottom: var(--h);">
+				<div style="width: var(--h) !important; margin: 0 !important;" class="main">
+					<div class="container">
+						<div id="next-piece" class="tile">
+							<span class="line v"></span>
+							<span class="line d1"></span>
+							<span class="line d2"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="interface">
+				<div style="width: 100%; display: flex; flex-direction: row; justify-content: space-between;">
+					<button id="undo-button" class="button" style="background-color: #aaddff";>Undo</button>
+					<button id="reset-button" class="button" style="background-color: #ffbbbb";>Reset</button>
+				</div>
+				<div class="buttons" id="ai-buttons">
+					<select id="select-ai" class="button">
+						<option value="mini.onnx">Model: Mini (1.0MB)</option>
+						<option value="medium.onnx">Model: Medium (3.4MB)</option>
+						<option value="large.onnx">Model: Large (12.1MB)</option>
+					</select>
+					<button id="load-ai" class="button">Load AI</button>
+				</div>
+			</div>
+		</div>
+		
+		<div class="main">
+			<div id="board" class="container">
+				<div class=""></div>
+				<div id="2" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div class=""></div>
+				<div id="1" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="6" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="0" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="5" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="11" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="4" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="10" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="3" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="9" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="15" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="8" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="14" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="7" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="13" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="18" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="12" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div id="17" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+				<div class=""></div>
+				<div id="16" class="tile">
+					<span class="line v"></span>
+					<span class="line d1"></span>
+					<span class="line d2"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="assets/scripts/game.js"></script>
+	<script src="assets/scripts/interact.js"></script>
+	<script src="assets/scripts/nn.js"></script>
+
+	<script>
+		const url = new URL(window.location.href);
+		let seed = parseInt(url.searchParams.get("seed"));
+		if (!seed) {
+			seed = Math.floor(Math.random() * 1000000);
+		};
+
+		// Display seed
+		document.getElementById("seed").innerText = seed;
+
+		// Make Share link clickable
+		document.getElementById("share").addEventListener("click", () => {
+			navigator.clipboard.writeText(`${window.location.href}?seed=${seed}`);
+		});
+
+		// Shuffle the pieces with the seed
+		pieces = shufflePieces(pieces, seed);
+
+		// Bind the undo button to the undo function
+		document.getElementById('undo-button').addEventListener('click', undo);
+		document.getElementById('reset-button').addEventListener('click', reset);
+
+		document.querySelectorAll("#board .tile").forEach(tile => {
+			tile.addEventListener("click", () => {
+				if (tile.className !== 'tile') return; // prevent overwriting
+				placePiece(tile);
+			});
+		});
+
+		// Start game
+		loadNextPiece();
+
+		// Get AI expected values
+		let model = null;
+		let best_tiles = {};
+		let use_ai = false;
+		document.getElementById("load-ai").addEventListener("click", loadAI);
+	</script>
+</body>
+
+</html>
