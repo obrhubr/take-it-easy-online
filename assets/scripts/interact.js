@@ -42,7 +42,7 @@ function addTileLabels(tile_labels, tile_styles) {
 	// Apply the labels to the board
 	for (let i = 0; i < 19; i++) {
 		if (!(i in tile_labels)) { continue; };
-		
+
 		const el = document.getElementById(i);
 
 		el.style = `background-color: ${tile_styles[i]};`;
@@ -130,6 +130,7 @@ function reset() {
 
 	placedCount = 0;
 	tileCountSpan.innerText = placedCount;
+	nextPieceDiv.style.display = "block";
 
 	// Reset AI expected score settings
 	use_ai = false;
