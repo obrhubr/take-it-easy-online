@@ -16,9 +16,9 @@ async function evaluate(encoded) {
 async function get_expected_scores() {
 	function interpolateColor(value, min = 0, max = 1) {
 		const ratio = (value - min) / (max - min);
-		
+
 		let r, g, b;
-	
+
 		if (ratio <= 0.5) {
 			let t = ratio / 0.5;
 			r = Math.round(255 * t);
@@ -30,7 +30,7 @@ async function get_expected_scores() {
 			g = Math.round(255 * (1 - t));
 			b = Math.round(255 * (1 - t));
 		};
-	
+
 		return `rgb(${r},${g},${b})`;
 	};
 
@@ -42,11 +42,11 @@ async function get_expected_scores() {
 		if (current_board[i] != null) { continue; };
 
 		current_board[i] = currentPiece;
-		
+
 		let expected = await evaluate(one_hot(current_board));
 		let reward = score_change(current_board, i);
 		let score = score_board(current_board);
-		
+
 		rewards[i] = expected + reward;
 		score_labels[i] = (expected + reward + score).toFixed(2);
 
@@ -71,7 +71,7 @@ function place_best() {
 
 	// If the tile is already occupied, return
 	if (history[history.length - 1][best_tile] != null) { return; };
-	
+
 	placePiece(document.getElementById(best_tile));
 };
 
@@ -88,10 +88,10 @@ async function compute_max_score() {
 			if (board[i] != null) { continue; };
 
 			board[i] = current_piece;
-			
+
 			let expected = await evaluate(one_hot(board));
 			let reward = score_change(board, i);
-			
+
 			if (expected + reward > best_score) {
 				best_score = expected + reward;
 				best_tile = i;
@@ -126,7 +126,7 @@ function initialise_buttons() {
 			<button id="ai-button" class="button">Calculate reward</button> \
 			<button id="ai-place" class="button">Place best</button> \
 		</div>`;
-	
+
 	document.getElementById("ai-activate").addEventListener("click", async () => {
 		use_ai = true;
 		await get_expected_scores();
@@ -146,6 +146,8 @@ function initialise_buttons() {
 };
 
 let loadAI = (async () => {
+	document.getElementById("load-ai").disabled = true;
+
 	model_filename = document.getElementById("select-ai").value;
 	model = await load_model(model_filename);
 
