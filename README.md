@@ -4,7 +4,7 @@
 
 Play on [take-it-easy.obrhubr.org](https://take-it-easy.obrhubr.org)!
 
-*Obtain It Lighltly* is my online implementation of the popular game. It supports client-side inference and let's users play with the AI models I trained.
+*Obtain It Lightly* is my online implementation of the popular game. It supports client-side inference and let's users play with the AI models I trained.
 
 More information about the game and training under [obrhubr/take-it-easy](https://github.com/obrhubr/take-it-easy).
 
